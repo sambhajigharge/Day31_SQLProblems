@@ -1,0 +1,426 @@
+Address Book System:
+#UC1:
+
+mysql> create database address_book_service;
+Query OK, 1 row affected (0.34 sec)
+
+mysql> show databases;
++----------------------+
+| Database             |
++----------------------+
+| address_book_service |
+| adress_book          |
+| employee             |
+| information_schema   |
+| mydb                 |
+| mysql                |
+| payroll_service      |
+| performance_schema   |
+| sys                  |
++----------------------+
+9 rows in set (0.01 sec)
+
+#UC2:
+
+mysql> use address_book_service;
+Database changed
+
+mysql> create table address_book(
+    -> SNo int unsigned not null auto_increment,
+    -> First_Name varchar(150) not null,
+    -> Last_Name  varchar(150) not null,
+    -> Address   varchar(100) not null,
+    -> City varchar(50) not null,
+    -> State varchar(50) not null,
+    -> Zip int(6) not null,
+    -> Phone_Number bigint not null,
+    -> primary key (SNo)
+    -> );
+Query OK, 0 rows affected, 1 warning (2.32 sec)
+
+mysql> describe address_book;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| SNo          | int unsigned | NO   | PRI | NULL    | auto_increment |
+| First_Name   | varchar(150) | NO   |     | NULL    |                |
+| Last_Name    | varchar(150) | NO   |     | NULL    |                |
+| Address      | varchar(100) | NO   |     | NULL    |                |
+| City         | varchar(50)  | NO   |     | NULL    |                |
+| State        | varchar(50)  | NO   |     | NULL    |                |
+| Zip          | int          | NO   |     | NULL    |                |
+| Phone_Number | bigint       | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.09 sec)
+
+mysql> alter table address_book add Email varchar(50) not null after Phone_Number;
+Query OK, 0 rows affected (11.76 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe address_book;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| SNo          | int unsigned | NO   | PRI | NULL    | auto_increment |
+| First_Name   | varchar(150) | NO   |     | NULL    |                |
+| Last_Name    | varchar(150) | NO   |     | NULL    |                |
+| Address      | varchar(100) | NO   |     | NULL    |                |
+| City         | varchar(50)  | NO   |     | NULL    |                |
+| State        | varchar(50)  | NO   |     | NULL    |                |
+| Zip          | int          | NO   |     | NULL    |                |
+| Phone_Number | bigint       | NO   |     | NULL    |                |
+| Email        | varchar(50)  | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+9 rows in set (1.94 sec)
+
+#UC3:
+
+mysql> insert into address_book
+    -> (First_Name,Last_Name,Address,City,State,Zip,Phone_Number,Email) values
+    -> ("Sudip","Panja","1/A/7","Kolkata","West_Bengal",700050,8910211371,"panja370@gmail.com"),
+    -> ("Amiya","Sarkar","24,APG","Bangalore","Karnataka",560004,7980847636,"sarkar.amiya@gmail.com"),
+    -> ("Rohit","Sinha","Elgin_Road","Mumbai","Maharastra",400001,8334003795,"sinha.rohit12@gmail.com");
+Query OK, 3 rows affected (1.43 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++-----+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+| SNo | First_Name | Last_Name | Address    | City      | State       | Zip    | Phone_Number | Email                   |
++-----+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+|   1 | Sudip      | Panja     | 1/A/7      | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com      |
+|   2 | Amiya      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 560004 |   7980847636 | sarkar.amiya@gmail.com  |
+|   3 | Rohit      | Sinha     | Elgin_Road | Mumbai    | Maharastra  | 400001 |   8334003795 | sinha.rohit12@gmail.com |
++-----+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+3 rows in set (0.05 sec)
+
+#UC4:
+
+mysql> update address_book set Phone_Number = 9038521669 where First_Name = "Amiya";
+Query OK, 1 row affected (0.15 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++-----+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+| SNo | First_Name | Last_Name | Address    | City      | State       | Zip    | Phone_Number | Email                   |
++-----+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+|   1 | Sudip      | Panja     | 1/A/7      | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com      |
+|   2 | Amiya      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 560004 |   9038521669 | sarkar.amiya@gmail.com  |
+|   3 | Rohit      | Sinha     | Elgin_Road | Mumbai    | Maharastra  | 400001 |   8334003795 | sinha.rohit12@gmail.com |
++-----+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+3 rows in set (0.11 sec)
+
+#UC5:
+
+mysql> delete from address_book where First_Name = "Rohit";
+Query OK, 1 row affected (0.19 sec)
+
+mysql> select * from address_book;
++-----+------------+-----------+---------+-----------+-------------+--------+--------------+------------------------+
+| SNo | First_Name | Last_Name | Address | City      | State       | Zip    | Phone_Number | Email                  |
++-----+------------+-----------+---------+-----------+-------------+--------+--------------+------------------------+
+|   1 | Sudip      | Panja     | 1/A/7   | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com     |
+|   2 | Amiya      | Sarkar    | 24,APG  | Bangalore | Karnataka   | 560004 |   9038521669 | sarkar.amiya@gmail.com |
++-----+------------+-----------+---------+-----------+-------------+--------+--------------+------------------------+
+2 rows in set (0.00 sec)
+
+#UC6:
+
+mysql> select * from address_book where City = "Kolkata" or State = "West_Bengal";
++-----+------------+-----------+---------+---------+-------------+--------+--------------+--------------------+
+| SNo | First_Name | Last_Name | Address | City    | State       | Zip    | Phone_Number | Email              |
++-----+------------+-----------+---------+---------+-------------+--------+--------------+--------------------+
+|   1 | Sudip      | Panja     | 1/A/7   | Kolkata | West_Bengal | 700050 |   8910211371 | panja370@gmail.com |
++-----+------------+-----------+---------+---------+-------------+--------+--------------+--------------------+
+1 row in set (0.10 sec)
+
+#UC7:
+
+mysql> select *,count(*) from address_book group by City;
++-----+------------+-----------+---------+-----------+-------------+--------+--------------+------------------------+----------+
+| SNo | First_Name | Last_Name | Address | City      | State       | Zip    | Phone_Number | Email                  | count(*) |
++-----+------------+-----------+---------+-----------+-------------+--------+--------------+------------------------+----------+
+|   1 | Sudip      | Panja     | 1/A/7   | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com     |        1 |
+|   2 | Amiya      | Sarkar    | 24,APG  | Bangalore | Karnataka   | 560004 |   9038521669 | sarkar.amiya@gmail.com |        1 |
++-----+------------+-----------+---------+-----------+-------------+--------+--------------+------------------------+----------+
+2 rows in set (0.00 sec)
+
+#UC8:
+
+mysql> select * from address_book where City = "Kolkata" order by First_Name;
++-----+------------+-----------+-----------+---------+-------------+--------+--------------+-----------------------+
+| SNo | First_Name | Last_Name | Address   | City    | State       | Zip    | Phone_Number | Email                 |
++-----+------------+-----------+-----------+---------+-------------+--------+--------------+-----------------------+
+|   5 | Rahul      | Singh     | Salt_Lake | Kolkata | West_Bengal | 700056 |   9433772081 | singh.rahul@gmail.com |
+|   1 | Sudip      | Panja     | 1/A/7     | Kolkata | West_Bengal | 700050 |   8910211371 | panja370@gmail.com    |
++-----+------------+-----------+-----------+---------+-------------+--------+--------------+-----------------------+
+2 rows in set (0.13 sec)
+
+#UC9:
+
+mysql> alter table address_book add Type varchar(50) after SNo;
+Query OK, 0 rows affected (3.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++-----+------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+| SNo | Type | First_Name | Last_Name | Address    | City      | State       | Zip    | Phone_Number | Email                   |
++-----+------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+|   1 | NULL | Sudip      | Panja     | 1/A/7      | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com      |
+|   2 | NULL | Amiya      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 560004 |   9038521669 | sarkar.amiya@gmail.com  |
+|   4 | NULL | Rohit      | Sinha     | Elgin_Road | Bangalore | Karnataka   | 400001 |   8334003795 | sinha.rohit12@gmail.com |
+|   5 | NULL | Rahul      | Singh     | Salt_Lake  | Kolkata   | West_Bengal | 700056 |   9433772081 | singh.rahul@gmail.com   |
++-----+------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+4 rows in set (0.00 sec)
+
+mysql> update address_book set Type = "Family" where First_Name = "Sudip";
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update address_book set Type = "Family" where First_Name = "Amiya";
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update address_book set Type = "Friends" where First_Name = "Rohit";
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update address_book set Type = "Friends" where First_Name = "Rahul";
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+| SNo | Type    | First_Name | Last_Name | Address    | City      | State       | Zip    | Phone_Number | Email                   |
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+|   1 | Family  | Sudip      | Panja     | 1/A/7      | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com      |
+|   2 | Family  | Amiya      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 560004 |   9038521669 | sarkar.amiya@gmail.com  |
+|   4 | Friends | Rohit      | Sinha     | Elgin_Road | Bangalore | Karnataka   | 400001 |   8334003795 | sinha.rohit12@gmail.com |
+|   5 | Friends | Rahul      | Singh     | Salt_Lake  | Kolkata   | West_Bengal | 700056 |   9433772081 | singh.rahul@gmail.com   |
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+4 rows in set (0.00 sec)
+
+#UC10:
+
+mysql> select Type,count(Type) from address_book group by Type;
++---------+-------------+
+| Type    | count(Type) |
++---------+-------------+
+| Family  |           2 |
+| Friends |           2 |
++---------+-------------+
+2 rows in set (0.00 sec)
+
+#UC11:
+
+mysql> insert into address_book
+    -> (Type,First_Name,Last_Name,Address,City,State,Zip,Phone_Number,Email) values
+    -> ("Family","Rimpa","Sarkar","24,APG","Bangalore","Karnataka",500061,798021134,"sarkar.rimpa@gmail.com"),
+    -> ("Friends","Sambit","Sen","15,SPR","Kolkata","West_Bengal",700002,8956237410,"sen.sambit@gmail.com");
+Query OK, 2 rows affected (0.08 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+| SNo | Type    | First_Name | Last_Name | Address    | City      | State       | Zip    | Phone_Number | Email                   |
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+|   1 | Family  | Sudip      | Panja     | 1/A/7      | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com      |
+|   2 | Family  | Amiya      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 560004 |   9038521669 | sarkar.amiya@gmail.com  |
+|   4 | Friends | Rohit      | Sinha     | Elgin_Road | Bangalore | Karnataka   | 400001 |   8334003795 | sinha.rohit12@gmail.com |
+|   5 | Friends | Rahul      | Singh     | Salt_Lake  | Kolkata   | West_Bengal | 700056 |   9433772081 | singh.rahul@gmail.com   |
+|   6 | Family  | Rimpa      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 500061 |    798021134 | sarkar.rimpa@gmail.com  |
+|   7 | Friends | Sambit     | Sen       | 15,SPR     | Kolkata   | West_Bengal | 700002 |   8956237410 | sen.sambit@gmail.com    |
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+
+6 rows in set (0.08 sec)
+
+#UC12:
+
+create table relation_type(
+Type_Id int not null,
+Type varchar(50) not null,
+primary key(Type)
+);
+
+insert into relation_type
+(Type_Id,Type)
+ values
+ (1,"Family"),
+ (2,"Friends");
+
+mysql> select * from relation_type;
++---------+---------+
+| Type_Id | Type    |
++---------+---------+
+|       1 | Family  |
+|       2 | Friends |
++---------+---------+
+2 rows in set (1.41 sec)
+
+alter table address_book add foreign key(Type) references relation_type(Type);
+
+mysql> SELECT * FROM address_book inner join relation_type on address_book.Type = relation_type.Type\G;
+*************************** 1. row ***************************
+         SNo: 1
+        Type: Family
+  First_Name: Sudip
+   Last_Name: Panja
+     Address: 1/A/7
+        City: Kolkata
+       State: West_Bengal
+         Zip: 700050
+Phone_Number: 8910211371
+       Email: panja370@gmail.com
+     Type_Id: 1
+        Type: Family
+*************************** 2. row ***************************
+         SNo: 2
+        Type: Family
+  First_Name: Amiya
+   Last_Name: Sarkar
+     Address: 24,APG
+        City: Bangalore
+       State: Karnataka
+         Zip: 560004
+Phone_Number: 9038521669
+       Email: sarkar.amiya@gmail.com
+     Type_Id: 1
+        Type: Family
+*************************** 3. row ***************************
+         SNo: 4
+        Type: Friends
+  First_Name: Rohit
+   Last_Name: Sinha
+     Address: Elgin_Road
+        City: Bangalore
+       State: Karnataka
+         Zip: 400001
+Phone_Number: 8334003795
+       Email: sinha.rohit12@gmail.com
+     Type_Id: 2
+        Type: Friends
+*************************** 4. row ***************************
+         SNo: 5
+        Type: Friends
+  First_Name: Rahul
+   Last_Name: Singh
+     Address: Salt_Lake
+        City: Kolkata
+       State: West_Bengal
+         Zip: 700056
+Phone_Number: 9433772081
+       Email: singh.rahul@gmail.com
+     Type_Id: 2
+        Type: Friends
+*************************** 5. row ***************************
+         SNo: 6
+        Type: Family
+  First_Name: Rimpa
+   Last_Name: Sarkar
+     Address: 24,APG
+        City: Bangalore
+       State: Karnataka
+         Zip: 500061
+Phone_Number: 798021134
+       Email: sarkar.rimpa@gmail.com
+     Type_Id: 1
+        Type: Family
+*************************** 6. row ***************************
+         SNo: 7
+        Type: Friends
+  First_Name: Sambit
+   Last_Name: Sen
+     Address: 15,SPR
+        City: Kolkata
+       State: West_Bengal
+         Zip: 700002
+Phone_Number: 8956237410
+       Email: sen.sambit@gmail.com
+     Type_Id: 2
+        Type: Friends
+6 rows in set (0.00 sec)
+
+ERROR:
+No query specified
+
+#UC13 :
+
+mysql> SELECT * FROM address_book ad inner join relation_type rt on ad.Type = rt.Type where ad.City = "Kolkata" or ad.State = "West_Bengal"\G;
+*************************** 1. row ***************************
+         SNo: 1
+        Type: Family
+  First_Name: Sudip
+   Last_Name: Panja
+     Address: 1/A/7
+        City: Kolkata
+       State: West_Bengal
+         Zip: 700050
+Phone_Number: 8910211371
+       Email: panja370@gmail.com
+     Type_Id: 1
+        Type: Family
+*************************** 2. row ***************************
+         SNo: 7
+        Type: Friends
+  First_Name: Sambit
+   Last_Name: Sen
+     Address: 15,SPR
+        City: Kolkata
+       State: West_Bengal
+         Zip: 700002
+Phone_Number: 8956237410
+       Email: sen.sambit@gmail.com
+     Type_Id: 2
+        Type: Friends
+*************************** 3. row ***************************
+         SNo: 5
+        Type: Friends
+  First_Name: Rahul
+   Last_Name: Singh
+     Address: Salt_Lake
+        City: Kolkata
+       State: West_Bengal
+         Zip: 700056
+Phone_Number: 9433772081
+       Email: singh.rahul@gmail.com
+     Type_Id: 2
+        Type: Friends
+3 rows in set (0.00 sec)
+
+mysql> select City,count(*) from address_book ad inner join relation_type rt on ad.Type = rt.Type group by ad.City;
++-----------+----------+
+| City      | count(*) |
++-----------+----------+
+| Kolkata   |        3 |
+| Bangalore |        3 |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select State,count(*) from address_book ad inner join relation_type rt on ad.Type = rt.Type group by ad.State;
++-------------+----------+
+| State       | count(*) |
++-------------+----------+
+| West_Bengal |        3 |
+| Karnataka   |        3 |
++-------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from address_book ad inner join relation_type rt on ad.Type = rt.Type order by ad.First_Name;
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+---------+---------+
+| SNo | Type    | First_Name | Last_Name | Address    | City      | State       | Zip    | Phone_Number | Email                   | Type_Id | Type    |
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+---------+---------+
+|   2 | Family  | Amiya      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 560004 |   9038521669 | sarkar.amiya@gmail.com  |       1 | Family  |
+|   5 | Friends | Rahul      | Singh     | Salt_Lake  | Kolkata   | West_Bengal | 700056 |   9433772081 | singh.rahul@gmail.com   |       2 | Friends |
+|   6 | Family  | Rimpa      | Sarkar    | 24,APG     | Bangalore | Karnataka   | 500061 |    798021134 | sarkar.rimpa@gmail.com  |       1 | Family  |
+|   4 | Friends | Rohit      | Sinha     | Elgin_Road | Bangalore | Karnataka   | 400001 |   8334003795 | sinha.rohit12@gmail.com |       2 | Friends |
+|   7 | Friends | Sambit     | Sen       | 15,SPR     | Kolkata   | West_Bengal | 700002 |   8956237410 | sen.sambit@gmail.com    |       2 | Friends |
+|   1 | Family  | Sudip      | Panja     | 1/A/7      | Kolkata   | West_Bengal | 700050 |   8910211371 | panja370@gmail.com      |       1 | Family  |
++-----+---------+------------+-----------+------------+-----------+-------------+--------+--------------+-------------------------+---------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select ad.Type,count(*) from address_book ad inner join relation_type rt on ad.Type = rt.Type group by Type;
++---------+----------+
+| Type    | count(*) |
++---------+----------+
+| Family  |        3 |
+| Friends |        3 |
++---------+----------+
+2 rows in set (0.00 sec)
